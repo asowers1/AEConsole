@@ -25,7 +25,7 @@
 import UIKit
 import AELog
 
-public class View: UIView {
+open class View: UIView {
     
     // MARK: - Constants
     
@@ -45,18 +45,18 @@ public class View: UIView {
     
     // MARK: - Outlets
     
-    let tableView = UITableView()
+    public let tableView = UITableView()
     let textField = UITextField()
     
     fileprivate let filterView = UIView()
     fileprivate let filterStack = UIStackView()
     fileprivate var filterViewTop: NSLayoutConstraint!
     
-    fileprivate let exportLogButton = UIButton()
+    public let exportLogButton = UIButton()
     fileprivate let linesCountStack = UIStackView()
     fileprivate let linesTotalLabel = UILabel()
     fileprivate let linesFilteredLabel = UILabel()
-    fileprivate let clearFilterButton = UIButton()
+    public let clearFilterButton = UIButton()
     
     fileprivate let menuView = UIView()
     fileprivate let menuStack = UIStackView()
@@ -122,13 +122,13 @@ public class View: UIView {
     
     // MARK: - Override
     
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         
         updateContentLayout()
     }
     
-    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    override open func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let hitView = super.hitTest(point, with: event)
         guard !tableView.isHidden else {
             if hitView == toggleToolbarButton { return hitView }
@@ -144,11 +144,11 @@ public class View: UIView {
         return hitView
     }
     
-    override public var canBecomeFirstResponder : Bool {
+    override open var canBecomeFirstResponder : Bool {
         return true
     }
     
-    override public func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+    override open func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             if config.isShakeGestureEnabled {
                 toggleUI()
