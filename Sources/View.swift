@@ -25,20 +25,21 @@
 import UIKit
 import AELog
 
-class View: UIView {
+public class View: UIView {
     
     // MARK: - Constants
     
     fileprivate struct Layout {
         static let FilterHeight: CGFloat = 60
         static let FilterExpandedTop: CGFloat = 0
+
         static let FilterCollapsedTop: CGFloat = -Layout.FilterHeight
         
         static let MenuWidth: CGFloat = 300
         static let MenuHeight: CGFloat = 50
-        static let MenuExpandedLeading: CGFloat = -Layout.MenuWidth
-        static let MenuCollapsedLeading: CGFloat = -75
-        
+        static let MenuExpandedLeading: CGFloat = -230
+        static let MenuCollapsedLeading: CGFloat = 0
+
         static let MagicNumber: CGFloat = 10
     }
     
@@ -104,12 +105,12 @@ class View: UIView {
     
     // MARK: - Init
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
     }
     
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
     }
@@ -121,14 +122,18 @@ class View: UIView {
     
     // MARK: - Override
     
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         
         updateContentLayout()
     }
     
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let hitView = super.hitTest(point, with: event)
+        guard !tableView.isHidden else {
+            if hitView == toggleToolbarButton { return hitView }
+            return nil
+        }
         
         let filter = hitView?.superview == filterStack
         let menu = hitView?.superview == menuStack
@@ -139,11 +144,11 @@ class View: UIView {
         return hitView
     }
     
-    override var canBecomeFirstResponder : Bool {
+    override public var canBecomeFirstResponder : Bool {
         return true
     }
     
-    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+    override public func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             if config.isShakeGestureEnabled {
                 toggleUI()
@@ -185,14 +190,11 @@ extension View {
     }
     
     fileprivate func updateContentLayout() {
-        let maxWidth = max(brain.contentWidth, bounds.width)
-        
-        let newFrame = CGRect(x: 0.0, y: 0.0, width: maxWidth, height: bounds.height)
-        tableView.frame = newFrame
+        tableView.frame = CGRect(x: 0.0, y: 0.0, width: bounds.width, height: bounds.height)
         
         UIView.animate(withDuration: 0.3, animations: { [unowned self] () -> Void in
             let inset = Layout.MagicNumber
-            let newInset = UIEdgeInsets(top: self.currentTopInset, left: inset, bottom: inset, right: maxWidth)
+            let newInset = UIEdgeInsets(top: self.currentTopInset, left: 0.0, bottom: inset, right: 0.0)
             self.tableView.contentInset = newInset
         })
         
@@ -397,11 +399,11 @@ extension View {
         
         filterView.addSubview(filterStack)
         addSubview(filterView)
-        
-        menuStack.addArrangedSubview(toggleToolbarButton)
-        menuStack.addArrangedSubview(forwardTouchesButton)
-        menuStack.addArrangedSubview(autoFollowButton)
+
         menuStack.addArrangedSubview(clearLogButton)
+        menuStack.addArrangedSubview(autoFollowButton)
+        menuStack.addArrangedSubview(forwardTouchesButton)
+        menuStack.addArrangedSubview(toggleToolbarButton)
         menuView.addSubview(menuStack)
         addSubview(menuView)
     }
@@ -449,9 +451,9 @@ extension View {
     private func configureMenuViewConstraints() {
         let width = menuView.widthAnchor.constraint(equalToConstant: Layout.MenuWidth + Layout.MagicNumber)
         let height = menuView.heightAnchor.constraint(equalToConstant: Layout.MenuHeight)
-        let centerY = menuView.centerYAnchor.constraint(equalTo: centerYAnchor)
-        menuViewLeading = menuView.leadingAnchor.constraint(equalTo: trailingAnchor, constant: Layout.MenuCollapsedLeading)
-        NSLayoutConstraint.activate([width, height, centerY, menuViewLeading])
+        let bottom = menuView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        menuViewLeading = menuView.leadingAnchor.constraint(equalTo: trailingAnchor, constant: -230.0)
+        NSLayoutConstraint.activate([width, height, bottom, menuViewLeading])
     }
     
     private func configureMenuStackConstraints() {
@@ -526,8 +528,9 @@ extension View {
     
     private func toggleToolbar() {
         filterViewTop.constant = isToolbarActive ? Layout.FilterCollapsedTop : Layout.FilterExpandedTop
-        menuViewLeading.constant = isToolbarActive ? Layout.MenuCollapsedLeading : Layout.MenuExpandedLeading
+        menuViewLeading.constant = isToolbarActive ? Layout.MenuExpandedLeading : Layout.MenuCollapsedLeading
         let alpha: CGFloat = isToolbarActive ? 0.3 : 1.0
+        tableView.isHidden = isToolbarActive
         
         UIView.animate(withDuration: 0.3, animations: {
             self.filterView.alpha = alpha

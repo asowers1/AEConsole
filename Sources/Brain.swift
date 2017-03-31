@@ -67,7 +67,11 @@ class Brain: NSObject {
     func addLogLine(_ line: Line) {
         calculateContentWidth(for: line)
         updateFilteredLines(with: line)
-        lines.append(line)
+        if let lastLine = lines.last, lastLine.message != line.message {
+            lines.append(line)
+        } else if lines.last == nil {
+            lines.append(line)
+        }
         updateInterfaceIfNeeded()
     }
     
@@ -204,6 +208,24 @@ extension Brain: UITableViewDataSource, UITableViewDelegate {
         let logLine = rows[indexPath.row]
         cell.textLabel?.text = logLine.description
     }
+    
+    func tableView(tableView: UITableView, performAction action: Selector, forRowAtIndexPath indexPath: IndexPath, withSender sender: Any?) {
+        let pasteboard = UIPasteboard.general
+        pasteboard.string = lines.reduce("\n ") { ($0 ?? "") + $1.message + "\n" }
+    }
+    
+    func tableView(tableView: UITableView, canPerformAction action: Selector, forRowAtIndexPath indexPath: IndexPath, withSender sender: Any?) -> Bool {
+        if action == "copy:" {
+            return true
+        }
+        
+        return false
+    }
+    
+    func tableView(tableView: UITableView, shouldShowMenuForRowAtIndexPath indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
     
     // MARK: - UIScrollViewDelegate
     
