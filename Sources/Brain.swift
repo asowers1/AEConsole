@@ -161,10 +161,7 @@ extension Brain {
     }
     
     fileprivate func calculateContentWidth(for line: Line) {
-        let calculatedLineWidth = getWidth(for: line)
-        if calculatedLineWidth > contentWidth {
-            contentWidth = calculatedLineWidth
-        }
+        contentWidth = UIApplication.shared.keyWindow?.screen.bounds.width ?? 0.0
     }
     
     fileprivate func updateFilteredLines(with line: Line) {

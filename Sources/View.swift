@@ -452,7 +452,7 @@ extension View {
         let width = menuView.widthAnchor.constraint(equalToConstant: Layout.MenuWidth + Layout.MagicNumber)
         let height = menuView.heightAnchor.constraint(equalToConstant: Layout.MenuHeight)
         let bottom = menuView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        menuViewLeading = menuView.leadingAnchor.constraint(equalTo: trailingAnchor, constant: -230.0)
+        menuViewLeading = menuView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -230.0)
         NSLayoutConstraint.activate([width, height, bottom, menuViewLeading])
     }
     

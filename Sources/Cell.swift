@@ -56,7 +56,7 @@ class Cell: UITableViewCell {
         
         label.font = config.consoleFont
         label.textColor = config.textColorWithOpacity
-        label.numberOfLines = 1
+        label.numberOfLines = 0
         label.textAlignment = .left
     }
     
