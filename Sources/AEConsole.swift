@@ -56,7 +56,6 @@ open class AEConsole: AELogDelegate {
         if Config.shared.isEnabled {
             AELog.launch(with: shared)
             shared.appDelegate = appDelegate
-            shared.brain.configureConsole(with: appDelegate)
             shared.brain.configureConsoleUI(with: appDelegate, injectedConsoleView: injectedConsoleView)
         }
     }
