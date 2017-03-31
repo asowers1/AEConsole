@@ -225,12 +225,12 @@ extension Brain: UITableViewDataSource, UITableViewDelegate {
         cell.textLabel?.text = logLine.description
     }
     
-    func tableView(tableView: UITableView, performAction action: Selector, forRowAtIndexPath indexPath: IndexPath, withSender sender: Any?) {
+    func tableView(_ tableView: UITableView, performAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) {
         let pasteboard = UIPasteboard.general
-        pasteboard.string = lines.reduce("\n ") { ($0 ?? "") + $1.message + "\n" }
+        pasteboard.string = lines.reduce("\n ") { $0 + $1.message + "\n" }
     }
     
-    func tableView(tableView: UITableView, canPerformAction action: Selector, forRowAtIndexPath indexPath: IndexPath, withSender sender: Any?) -> Bool {
+    func tableView(_ tableView: UITableView, canPerformAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
         if action == "copy:" {
             return true
         }
@@ -238,7 +238,7 @@ extension Brain: UITableViewDataSource, UITableViewDelegate {
         return false
     }
     
-    func tableView(tableView: UITableView, shouldShowMenuForRowAtIndexPath indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
