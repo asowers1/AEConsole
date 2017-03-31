@@ -62,10 +62,10 @@ public class View: UIView {
     fileprivate let menuStack = UIStackView()
     fileprivate var menuViewLeading: NSLayoutConstraint!
     
-    fileprivate let toggleToolbarButton = UIButton()
-    fileprivate let forwardTouchesButton = UIButton()
-    fileprivate let autoFollowButton = UIButton()
-    fileprivate let clearLogButton = UIButton()
+    public let toggleToolbarButton = UIButton()
+    public let forwardTouchesButton = UIButton()
+    public let autoFollowButton = UIButton()
+    public let clearLogButton = UIButton()
     
     fileprivate let updateOpacityGesture = UIPanGestureRecognizer()
     fileprivate let hideConsoleGesture = UITapGestureRecognizer()
@@ -340,7 +340,7 @@ extension View {
         menuStack.distribution = .fillEqually
     }
     
-    private func configureMenuButtons() {
+    public func configureMenuButtons() {
         toggleToolbarButton.setTitle("☀️", for: .normal)
         forwardTouchesButton.setTitle("⚡️", for: .normal)
         forwardTouchesButton.setTitle("✨", for: .selected)

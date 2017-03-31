@@ -52,6 +52,14 @@ open class AEConsole: AELogDelegate {
         }
     }
     
+    open class func launch(with appDelegate: UIApplicationDelegate, injectedConsoleView: View = View()) {
+        if Config.shared.isEnabled {
+            AELog.launch(with: shared)
+            shared.appDelegate = appDelegate
+            shared.brain.configureConsole(with: appDelegate)
+            shared.brain.configureConsoleUI(with: appDelegate, injectedConsoleView: injectedConsoleView)
+        }
+    }
     /// Current state of Console UI visibility
     open class var isHidden: Bool {
         return !shared.brain.console.isOnScreen

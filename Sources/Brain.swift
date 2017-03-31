@@ -64,6 +64,22 @@ class Brain: NSObject {
         console.textField.delegate = self
     }
     
+    public func configureConsoleUI(with delegate: UIApplicationDelegate, injectedConsoleView: View) {
+        guard let _window = delegate.window, let window = _window else { return }
+        
+        let aConsole = injectedConsoleView
+        aConsole.frame = window.bounds
+        aConsole.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        aConsole.isOnScreen = Config.shared.isAutoStartEnabled
+        window.addSubview(aConsole)
+        
+        console = aConsole
+        console.tableView.dataSource = self
+        console.tableView.delegate = self
+        console.tableView.rowHeight = UITableViewAutomaticDimension
+        console.textField.delegate = self
+    }
+    
     func addLogLine(_ line: Line) {
         calculateContentWidth(for: line)
         updateFilteredLines(with: line)
