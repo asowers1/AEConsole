@@ -340,7 +340,7 @@ extension View {
         menuStack.distribution = .fillEqually
     }
     
-    public func configureMenuButtons() {
+    open func configureMenuButtons() {
         toggleToolbarButton.setTitle("☀️", for: .normal)
         forwardTouchesButton.setTitle("⚡️", for: .normal)
         forwardTouchesButton.setTitle("✨", for: .selected)
