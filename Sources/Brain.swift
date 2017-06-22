@@ -228,7 +228,7 @@ extension Brain: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, canPerformAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        if action == "copy:" {
+        if action == #selector(UIResponderStandardEditActions.copy(_:)) {
             return true
         }
         
